@@ -7,7 +7,6 @@ precommit-job:
 
 build-job:
   stage: build
-  needs: [precommit-job]
   script:
     - echo "building..."
     - echo "Build complete"
