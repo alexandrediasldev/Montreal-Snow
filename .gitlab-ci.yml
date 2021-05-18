@@ -15,10 +15,12 @@ unit-job:
   needs: [build-job]
   stage: test
   script:
-    - pytest -v --junitxml=report.xml
+    - pytest --cov=./ -v --junitxml=report.xml
+    - coverage xml
   artifacts:
     when: always
     reports:
+      cobertura: coverage.xml
       junit: report.xml
 
 functionnal-job:
