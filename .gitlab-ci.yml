@@ -1,0 +1,33 @@
+image: dal3k/ero1:latest
+
+precommit-job:
+  stage: build
+  script:
+    - pre-commit run -a
+
+build-job:
+  stage: build
+  needs: [precommit-job]
+  script:
+    - echo "building..."
+    - echo "Build complete"
+
+unit-job:
+  needs: [build-job]
+  stage: test
+  script: echo "running unit tests..."
+
+functionnal-job:
+  needs: [build-job]
+  stage: test
+  script: echo "running functionnal tests..."
+
+integration-job:
+  needs: [build-job]
+  stage: test
+  script: echo "running integration tests..."
+
+deploy:
+  needs: [unit-job, functionnal-job, integration-job]
+  stage: deploy
+  script: echo "deploying..."
