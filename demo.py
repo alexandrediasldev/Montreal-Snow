@@ -19,6 +19,10 @@ def main():
             country = args.country
 
         city = ox.graph_from_place(args.city + ', ' + country, network_type='drive')
+
+        for u, v, keys in city.edges( keys=True):
+            print(u,v,keys)
+
         ax = ox.plot_graph(city)
 
 
