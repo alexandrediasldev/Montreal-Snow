@@ -1,6 +1,9 @@
 import argparse
+import real.plot_path as pl
 
+import networkx as nx
 import osmnx as ox
+import plotly.graph_objects as go
 
 
 def main():
@@ -18,12 +21,24 @@ def main():
         else:
             country = args.country
 
-        city = ox.graph_from_place(args.city + ', ' + country, network_type='drive')
+        G = ox.graph_from_place(args.city + ', ' + country, network_type='drive')
 
-        for u, v, keys in city.edges(keys=True):
-            print(u, v, keys)
+        route = nx.shortest_path(G, list(G.nodes)[0], list(G.nodes)[-1])
 
-        ax = ox.plot_graph(city)
+        long = []
+        lat = []
+        for i in route:
+            point = G.nodes[i]
+            long.append(point['x'])
+            lat.append(point['y'])
+
+        origin_point = long[0], lat[0]
+        dest_point = long[-1], lat[-1]
+
+        print(origin_point)
+        print(dest_point)
+
+        pl.plot_path(lat, long, origin_point, dest_point)
 
 
 if __name__ == '__main__':
