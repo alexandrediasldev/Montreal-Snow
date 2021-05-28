@@ -3,12 +3,11 @@ def degres(adj_mat):
     res = [0] * n
 
     for i in range(n):
-        res[i] = adj_mat[i].count(1)
+        res[i] = len(adj_mat[i])
 
     return res
-
-
-def is_eulerian(adjs):
+#adjs : adjacent_list
+def is_eulerian(adjs): #check if adjs is eulerian
     odds = degres(adjs)
     ct = 0
 
