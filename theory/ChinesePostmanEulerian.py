@@ -42,5 +42,5 @@ def find_eulerian_path(edges, n):
             break
 
     find_eulerian_path_auxiliary(adj, vertex, remaining_edges, res)
-    print(res)
+    return res
 

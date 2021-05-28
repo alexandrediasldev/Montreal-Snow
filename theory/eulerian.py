@@ -19,5 +19,15 @@ def is_eulerian(adjs): #check if adjs is eulerian
         if ct > 2:
             return False
 
-    return ct != 0 or ct == 2
+    return ct == 0 or ct == 2
+
+
+""""
+used to test the eulerian path creation
+ path = the path to test
+ edges = 
+"""
+def is_eulerian_path(edges, path):
+    if len(path) != len(edges) + 1:
+        return False
 
