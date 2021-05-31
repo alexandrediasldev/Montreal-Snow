@@ -4,8 +4,6 @@ n = graph's number of vertices
 is_directed = is the graph is directed
 return : the adjacency list of the graph
 """
-from typing import List, Any, Union
-
 
 def adj_list(edges, n, is_directed): #adj list made from an edge list with n nodes
     successor = [[] for a in range(n)]
@@ -48,6 +46,7 @@ def remove_edge(remaining_edges, vertex, dest, directed=False):
     remaining_edges.pop(i)
 
 def extract_odd_vertice(adj_mat):
+
     n = len(adj_mat)
     res = [0] * n
 

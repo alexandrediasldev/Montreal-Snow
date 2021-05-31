@@ -1,6 +1,6 @@
 # Here we are simply finding an eulerian cycle
-import eulerian
-import Util
+from theory import eulerian
+from theory import Util
 
 """
 procedure FindEulerPath(V)
