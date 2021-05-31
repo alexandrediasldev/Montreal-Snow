@@ -1,4 +1,9 @@
 def degres(adj_mat):
+    """
+    Calculates the degrees of each vertex
+    :param adj_mat: the graph represented by an adjacency list
+    :return: an array containing the degree for each vertex
+    """
     n = len(adj_mat)
     res = [0] * n
 
@@ -6,8 +11,14 @@ def degres(adj_mat):
         res[i] = len(adj_mat[i])
 
     return res
-#adjs : adjacent_list
-def is_eulerian(adjs): #check if adjs is eulerian
+
+def is_eulerian(adjs):
+    """
+    Checks if the graph is eulerian
+
+    :param adjs: adjacency list representing the graph
+    :return: boolean indicating if the graph is eulerian
+    """
     odds = degres(adjs)
     ct = 0
 
@@ -25,7 +36,7 @@ def is_eulerian(adjs): #check if adjs is eulerian
 """"
 used to test the eulerian path creation
  path = the path to test
- edges = 
+ edges = the edgelist of the given graph
 """
 def is_eulerian_path(edges, path):
     if len(path) != len(edges) + 1:
