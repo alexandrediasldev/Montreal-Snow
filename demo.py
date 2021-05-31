@@ -74,7 +74,7 @@ def main():
     # Preview with a bit of hack (there is no head/slice method for dictionaries).
     print(dict(list(odd_node_pairs_shortest_paths.items())[0:10]))
 
-    # Generate the complete graph
+    # 2.3: Generate the complete graph
     g_odd_complete = create_complete_graph(odd_node_pairs_shortest_paths, flip_weights=True)
 
     # Counts
