@@ -105,6 +105,7 @@ def main():
     #print(len(G.nodes))
     #route = nx.shortest_path(G, list(G.nodes)[0], list(G.nodes)[-1])
 
+
     #long = []
     #lat = []
     #for i in route:
@@ -206,8 +207,7 @@ def main():
         print(i, edge)
 
     # Computing some stats
-    for edge in euler_circuit:
-        print(edge[2][0])
+
     total_mileage_of_circuit = sum([edge[2][0]['length'] for edge in euler_circuit])
     total_mileage_on_orig_trail_map = sum(nx.get_edge_attributes(G, 'distance').values())
     _vcn = pd.value_counts(pd.value_counts([(e[0]) for e in euler_circuit]), sort=False)
@@ -237,16 +237,26 @@ def main():
 
     print('\nNumber of times visiting each edge:')
     print(edge_visits.to_string(index=False))
+    route = []
+    for edge in euler_circuit:
+        route.append(edge[0])
+    long = []
+    lat = []
+    for i in route:
+        point = G.nodes[i]
+        long.append(point['x'])
+        lat.append(point['y'])
+
     #print(odd_node_pairs)
     #print('Number of pairs: {}'.format(len(odd_node_pairs)))
 
-    #origin_point = long[0], lat[0]
-    #dest_point = long[-1], lat[-1]
+    origin_point = long[0], lat[0]
+    dest_point = long[-1], lat[-1]
 
-    #print(origin_point)
-    #print(dest_point)
+    print(origin_point)
+    print(dest_point)
 
-    #pl.plot_path(lat, long, origin_point, dest_point)
+    pl.plot_path(lat, long, origin_point, dest_point)
 
 
 if __name__ == '__main__':
