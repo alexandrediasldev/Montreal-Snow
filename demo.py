@@ -45,7 +45,9 @@ def create_complete_graph(pair_weights, flip_weights=True):
 def main():
 
     city,country = parse_argument()
-
+    if(city is None or country is None):
+        print("City or country not found")
+        return 1
 
     G = ox.graph_from_place(city + ', ' + country, network_type='drive')
     G = ox.utils_graph.get_undirected(G)
