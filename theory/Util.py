@@ -1,12 +1,11 @@
-""""
-edges = graph's edges
-n = graph's number of vertices
-is_directed = is the graph is directed
-return : the adjacency list of the graph
-"""
-
-def adj_list(edges, n, is_directed): #adj list made from an edge list with n nodes
-    successor = [[] for a in range(n)]
+def adj_list(edges, n, is_directed):
+    """"
+    edges = graph's edges
+    n = graph's number of vertices
+    is_directed = is the graph is directed
+    return : the adjacency list of the graph
+    """
+    successor = [[] for _ in range(n)]
 
     for (a, b) in edges:
         successor[a].append(b)
@@ -14,6 +13,21 @@ def adj_list(edges, n, is_directed): #adj list made from an edge list with n nod
             successor[b].append(a)
 
     return successor
+
+
+def adj_matrix(edges, n, is_directed):
+    """
+    same as above bot returns adjacency matrix
+    """
+    matrix = [[0 for _ in range(n)] for _ in range(n)]
+
+    for (a, b) in edges:
+        matrix[a][b] = 1
+        if not is_directed:
+            matrix[b][a] = 1
+
+    return matrix
+
 
 """
 function used in eulerian path 
@@ -24,29 +38,20 @@ remaining_edges: list containing the remaining edges to operate on
 vertex: the first vertex of the edge
 dest: the last vertex of the edge
 """
-def remove_edge(remaining_edges, vertex, dest, directed=False):
 
-    if remaining_edges == None:
-        return
 
-    p1 = (vertex, dest)
-    is_p1 = p1 in remaining_edges
+def remove_edge(adj, vertex, dest, is_directed=False):
+    try:
+        index = adj[vertex].index(dest)
+        adj[vertex].pop(index)
+    except ValueError:
+        index = adj[dest].index(vertex)
+        adj[dest].pop(index)
+    if not is_directed:
+        index = adj[dest].index(vertex)
+        adj[dest].pop(index)
 
-    if is_p1:
-        i = remaining_edges.index(p1)
-
-    if not directed and not is_p1:
-       p2 = (dest, vertex)
-
-       if p2 in remaining_edges:
-          i = remaining_edges.index(p2)
-    else:
-        return
-
-    remaining_edges.pop(i)
-
-def extract_odd_vertice(adj_mat):
-
+def extract_odd_vertices(adj_mat):
     n = len(adj_mat)
     res = [0] * n
 
@@ -54,6 +59,7 @@ def extract_odd_vertice(adj_mat):
         res[i] = len(adj_mat[i])
 
     return res
+
 
 def odd_vertices(adj_list):
     res = []
@@ -64,8 +70,28 @@ def odd_vertices(adj_list):
 
     return res
 
+
 def pair_odd_vertices(odd_vertices, edges, n):
     """
         FIXME
     """
     return
+
+
+def reachable(adj, vertex, visited):
+    """
+    :param adj: the graph adjacency list
+    :param vertex: the current vertex
+    :param visited: the list of visited vertices
+    :return: the number of vertices connected to vertex
+
+    This algorithm is based on a DFS an will be useful to find if we did not remove
+    an important edge when finding an eulerian path
+    """
+
+    res = 1
+    visited[vertex] = True
+    for dst in adj[vertex]:
+        if not visited[dst]:
+            res += reachable(adj, dst, visited)
+    return res

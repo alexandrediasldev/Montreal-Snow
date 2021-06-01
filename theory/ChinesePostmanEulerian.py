@@ -2,45 +2,61 @@
 from theory import eulerian
 from theory import Util
 
-"""
-procedure FindEulerPath(V)
-  1. iterate through all the edges outgoing from vertex V;
-       remove this edge from the graph,
-       and call FindEulerPath from the second end of this edge;
-  2. add vertex V to the answer.
-"""
 
-"""
+def is_bridge(adj, start, dst):
+    """
+    :param adj: graph's adjacency list
+    :param start: the starting vertex
+    :param dst: the destination vertex
+    :return: true if start <-> dst is a bridge
+    meaning going through this edge would ruin the eulerian path
+    """
+    if len(adj[start]) == 1:
+        Util.remove_edge(adj, start, dst)
+        return False
 
-adj = The adjacency List
-vertex = the current vertex
-remaining_edges = list of remaining edges to visit 
-res = list of vertex , eulerian path
+    count_1 = Util.reachable(adj, start, [False] * len(adj))
+    Util.remove_edge(adj, start, dst)
 
-"""
-def find_eulerian_path_auxiliary(adj, vertex, remaining_edges, res=[]):
+    if count_1 == Util.reachable( adj, start, [False] * len(adj)) :
+        return False
+    adj[start].append(dst)
+    adj[dst].append(start)
+    return True
 
-    for dest in adj[vertex]:
-        if (vertex, dest) in remaining_edges or (dest, vertex) in remaining_edges :
-            Util.remove_edge(remaining_edges, vertex, dest)
-            find_eulerian_path_auxiliary(adj, dest, remaining_edges, res)
 
-    res.append(vertex)
+
+def path_aux(adj, start, res):
+    """
+    recursive function to find an eulerian path
+    :param res the resulting path
+    """
+    for dst in adj[start]:
+        if not is_bridge(adj, start, dst):
+            res.append(dst)
+            path_aux(adj, dst, res)
+
 
 def find_eulerian_path(edges, n):
-    res = []
-    vertex = 0
-    remaining_edges = edges.copy()
+    """
+    :param edges: list of the graph's edges
+    :param n: the number of vertices
+    :return: an array with the vertices to go through in order to have an eulerian path/cycle
+
+    the graph is undirected
+    """
+    start = 0
     adj = Util.adj_list(edges, n, False)
 
     assert (eulerian.is_eulerian(adj))
-    degres = eulerian.degres(adj)
+    degrees = eulerian.degres(adj)
 
-    for i in range(len(degres)):
-        if  degres[i]% 2 == 1:
-            vertex = i
+    for i in range(len(degrees)):
+        if degrees[i] % 2 == 1:
+            start = i
             break
 
-    find_eulerian_path_auxiliary(adj, vertex, remaining_edges, res)
-    return res
+    res = [start]
+    path_aux(adj, start, res)
 
+    return res

@@ -16,7 +16,7 @@ def is_eulerian(adjs):
     """
     Checks if the graph is eulerian
 
-    :param adjs: adjacency list representing the graph
+    :param edges: adjacency list representing the graph
     :return: boolean indicating if the graph is eulerian
     """
     odds = degres(adjs)
@@ -38,7 +38,7 @@ def is_eulerian_cycle(edges, cycle):
     checks if the given cycle is eulerian
 
     :param edges: edge list representing the graph
-    :param path: the cycle to test
+    :param cycle: the cycle to test
     :return: True if the cyclee is eulerian, False otherwise
     """
 
@@ -67,16 +67,15 @@ def is_eulerian_cycle(edges, cycle):
 
     return True
 
-def generate_eulerian_cycle(edges):
 
 
 def is_eulerian_path(edges, path):
     """
     used to test the eulerian path creation
 
-    :param edges: the edgelist representing the graph
-    :param path: the path to test
-    :return: True if it is eulerian False otherwise
+    :param edges: the edges list representing the graph
+    :param path: the path/cycle to test
+    :return: True if the path/cycle it is eulerian False otherwise
     """
 
     if len(path) - 1 != len(edges):
@@ -84,7 +83,7 @@ def is_eulerian_path(edges, path):
 
     visited = [False] * len(edges)
 
-    for i in range(len(path)) - 1:
+    for i in range(len(path) - 1):
 
         Va, Vb = path[i], path[i + 1]
         tuple_1 = (Va, Vb)
