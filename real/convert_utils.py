@@ -1,4 +1,3 @@
-
 def euler_circuit_to_route(euler_circuit):
     """
     :param euler_circuit: Eulerian circuit
@@ -29,7 +28,7 @@ def long_lat_to_points(long, lat):
     """
     :param long: list of longitude
     :param lat: list of latitude
-    :return: the starting and ending point for ploting the graph
+    :return: the starting and ending point for plotting the graph
     """
     origin_point = long[0], lat[0]
     dest_point = long[-1], lat[-1]

@@ -4,6 +4,7 @@ import real.plot_path as pl
 import networkx as nx
 import osmnx as ox
 
+
 def stats(G, euler_circuit):
     """
     Compute stats about the graph, show them and plot them
@@ -20,8 +21,6 @@ def stats(G, euler_circuit):
         pd.value_counts([sorted(e)[0] + sorted(e)[1] for e in nx.MultiDiGraph(euler_circuit).edges()]))
     edge_visits = pd.DataFrame({'number of visits': _vce.index, 'number of edges': _vce.values})
     edge_visits = edge_visits.sort_values(by='number of visits')
-
-
 
     # Printing stats
     print("=========STATS=========")
@@ -40,7 +39,7 @@ def stats(G, euler_circuit):
 
     print('Number of edges traversed more than once: {}\n'.format(len(euler_circuit) - len(G.edges())))
 
-    #Plotting stats
+    # Plotting stats
 
     pl.plot_visiting_edges(edge_visits)
     pl.plot_visiting_nodes(node_visits)
