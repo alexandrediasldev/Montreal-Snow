@@ -1,7 +1,15 @@
 import networkx as nx
 
+
 def get_shortest_paths_distances(graph, pairs, edge_weight_name):
-    """Compute shortest distance between each pair of nodes in a graph.  Return a dictionary keyed on node pairs (tuples)."""
+    """
+    Compute shortest distance between each pair of nodes in a graph.
+    Return a dictionary keyed on node pairs (tuples).
+    :param graph: a graph
+    :param pairs: pairs of nodes
+    :param edge_weight_name: name of weight attribute
+    :return: the shortest path for theses nodes
+    """
     distances = {}
     for pair in pairs:
         distances[pair] = nx.dijkstra_path_length(graph, pair[0], pair[1], weight=edge_weight_name)
@@ -11,9 +19,9 @@ def get_shortest_paths_distances(graph, pairs, edge_weight_name):
 def create_complete_graph(pair_weights, flip_weights=True):
     """
     Create a completely connected graph using a list of vertex pairs and the shortest path distances between them
-    Parameters:
-        pair_weights: list[tuple] from the output of get_shortest_paths_distances
-        flip_weights: Boolean. Should we negate the edge attribute in pair_weights?
+    :param pair_weights: list[tuple] from the output of get_shortest_paths_distances
+    :param flip_weights: Boolean.
+    :return: complete graph
     """
     g = nx.Graph()
     for k, v in pair_weights.items():
@@ -25,11 +33,9 @@ def create_complete_graph(pair_weights, flip_weights=True):
 def add_augmenting_path_to_graph(graph, min_weight_pairs):
     """
     Add the min weight matching edges to the original graph
-    Parameters:
-        graph: NetworkX graph (original graph from trailmap)
-        min_weight_pairs: list[tuples] of node pairs from min weight matching
-    Returns:
-        augmented NetworkX graph
+    :param graph: a networkx graph
+    :param min_weight_pairs: list[tuples] of node pairs from min weight matching
+    :return: augmented networkx graph
     """
 
     # We need to make the augmented graph a MultiGraph so we can add parallel edges
@@ -44,7 +50,13 @@ def add_augmenting_path_to_graph(graph, min_weight_pairs):
 
 
 def create_eulerian_circuit(graph_augmented, graph_original, starting_node=None):
-    """Create the eulerian path using only edges from the original graph."""
+    """
+    Create the eulerian path using only edges from the original graph.
+    :param graph_augmented: an augmented graph
+    :param graph_original: the original graph
+    :param starting_node: the starting node
+    :return: eulerian circuit
+    """
     euler_circuit = []
     naive_circuit = list(nx.eulerian_circuit(graph_augmented, source=starting_node))
 
