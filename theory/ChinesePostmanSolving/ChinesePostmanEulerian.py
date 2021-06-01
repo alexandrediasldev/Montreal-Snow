@@ -18,12 +18,11 @@ def is_bridge(adj, start, dst):
     count_1 = Util.reachable(adj, start, [False] * len(adj))
     Util.remove_edge(adj, start, dst)
 
-    if count_1 == Util.reachable( adj, start, [False] * len(adj)) :
+    if count_1 == Util.reachable(adj, start, [False] * len(adj)):
         return False
     adj[start].append(dst)
     adj[dst].append(start)
     return True
-
 
 
 def path_aux(adj, start, res):
