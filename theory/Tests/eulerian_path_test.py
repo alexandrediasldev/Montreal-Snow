@@ -1,5 +1,6 @@
 import unittest
-from theory import ChinesePostmanEulerian as cp, Util
+from theory import Util
+from theory.ChinesePostmanSolving import ChinesePostmanEulerian as cp
 from theory import eulerian as euler
 
 class MyTestCase(unittest.TestCase):
