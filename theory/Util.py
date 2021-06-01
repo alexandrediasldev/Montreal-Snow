@@ -1,4 +1,4 @@
-def adj_list(edges, n, is_directed):
+def adj_list(edges, n, is_directed=False):
     """"
     edges = graph's edges
     n = graph's number of vertices
@@ -15,7 +15,7 @@ def adj_list(edges, n, is_directed):
     return successor
 
 
-def adj_matrix(edges, n, is_directed):
+def adj_matrix(edges, n, is_directed=False):
     """
     same as above bot returns adjacency matrix
     """
@@ -28,8 +28,9 @@ def adj_matrix(edges, n, is_directed):
 
     return matrix
 
+
 """
-function used in eulerian path 
+function used in eulerian path
 removes an edge from the list.
 Tries both permutations for undirected graph
 
@@ -49,6 +50,7 @@ def remove_edge(adj, vertex, dest, is_directed=False):
     if not is_directed:
         index = adj[dest].index(vertex)
         adj[dest].pop(index)
+
 
 def extract_odd_vertices(adj_mat):
     n = len(adj_mat)
@@ -93,4 +95,75 @@ def reachable(adj, vertex, visited):
     for dst in adj[vertex]:
         if not visited[dst]:
             res += reachable(adj, dst, visited)
+    return res
+
+
+"""
+jkhrsj
+"""
+
+
+def reverse_graph(n, edges):
+    """
+    Helper function for reversing the graph
+    :param n: the number of vertex
+    :param edges: the graph's edge list
+    :return: the reversed graph
+    """
+    lst = [[] for _ in range(n)]
+
+    for (s, d) in edges:
+        lst[d].append(s)
+
+    return lst
+
+
+def rec(s, succ, seen, stack):
+    seen[s] = True
+
+    for d in succ[s]:
+        if not seen[d]:
+            rec(d, succ, seen, stack)
+
+    stack.append(s)
+
+
+def build_res(s, succ, visited, res):
+    visited[s] = True
+    res.append(s)
+
+    for d in succ[s]:
+        if not visited[d]:
+            build_res(d, succ, visited, res)
+
+
+def kosaraju(n, edges):
+    """
+    Kosaraju algorithm for finding strongly connected components
+    :param n: the number of vertex
+    :param edges: the graph's edge list
+    :return: the list of strongly connected components
+    """
+
+    succ = adj_list(edges, n, True)
+    visited = [False] * n
+    stack = []
+    res = []
+
+    for i in range(n):
+        if not visited[i]:
+            rec(i, succ, visited, stack)
+
+    rev = reverse_graph(n, edges)
+    visited = [False] * n
+
+    while len(stack) > 0:
+
+        node = stack.pop()
+        sub = []
+
+        if not visited[node]:
+            build_res(node, rev, visited, sub)
+            res.append(sub)
+
     return res

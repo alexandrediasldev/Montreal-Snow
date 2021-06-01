@@ -12,6 +12,7 @@ def degres(adj_mat):
 
     return res
 
+
 def is_eulerian(adjs):
     """
     Checks if the graph is eulerian
@@ -32,8 +33,8 @@ def is_eulerian(adjs):
 
     return ct == 0 or ct == 2
 
-def is_eulerian_cycle(edges, cycle):
 
+def is_eulerian_cycle(edges, cycle):
     """
     checks if the given cycle is eulerian
 
@@ -68,7 +69,6 @@ def is_eulerian_cycle(edges, cycle):
     return True
 
 
-
 def is_eulerian_path(edges, path):
     """
     used to test the eulerian path creation
@@ -99,3 +99,6 @@ def is_eulerian_path(edges, path):
 
     return True
 
+
+def find_is_eulerian_cycle_directed():
+    return None
