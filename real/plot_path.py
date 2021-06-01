@@ -26,6 +26,7 @@ def plot_path(lat, long, origin_point, destination_point):
         lat=lat,
         marker={'size': 10},
         line=dict(width=4.5, color='blue')))
+
     # adding source marker
     fig.add_trace(go.Scattermapbox(
         name="Source",
