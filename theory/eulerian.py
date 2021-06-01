@@ -12,11 +12,12 @@ def degres(adj_mat):
 
     return res
 
+
 def is_eulerian(adjs):
     """
     Checks if the graph is eulerian
 
-    :param edges: adjacency list representing the graph
+    :param adjs: adjacency list representing the graph
     :return: boolean indicating if the graph is eulerian
     """
     odds = degres(adjs)
@@ -32,8 +33,8 @@ def is_eulerian(adjs):
 
     return ct == 0 or ct == 2
 
-def is_eulerian_cycle(edges, cycle):
 
+def is_eulerian_cycle(edges, cycle):
     """
     checks if the given cycle is eulerian
 
@@ -68,7 +69,6 @@ def is_eulerian_cycle(edges, cycle):
     return True
 
 
-
 def is_eulerian_path(edges, path):
     """
     used to test the eulerian path creation
@@ -90,12 +90,14 @@ def is_eulerian_path(edges, path):
         tuple_2 = (Vb, Va)
 
         for j in range(len(edges)):
-            if tuple_1 == edges[j] or tuple_2 == edges[j]:
+            edge = edges[j]
+            tuple = (edge[0], edge[1])
+            if (tuple_1 == tuple or tuple_2 == tuple) and not visited[j]:
                 visited[j] = True
+                break
 
     for b in visited:
         if not b:
             return False
 
     return True
-

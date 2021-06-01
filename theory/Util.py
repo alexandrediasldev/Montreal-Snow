@@ -7,10 +7,10 @@ def adj_list(edges, n, is_directed):
     """
     successor = [[] for _ in range(n)]
 
-    for (a, b) in edges:
-        successor[a].append(b)
+    for edge in edges:
+        successor[edge[0]].append(edge[1])
         if not is_directed:
-            successor[b].append(a)
+            successor[edge[1]].append(edge[0])
 
     return successor
 
@@ -60,13 +60,12 @@ def extract_odd_vertices(adj_mat):
     return res
 
 
+
 def odd_vertices(adj_list):
     res = []
-
-    for d in adj_list:
-        if len(d) % 2 == 1:
-            res.append(d)
-
+    for i in range(len(adj_list)):
+        if len(adj_list[i]) % 2 == 1:
+            res.append(i)
     return res
 
 
