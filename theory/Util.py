@@ -21,13 +21,12 @@ def adj_matrix(edges, n, is_directed):
     """
     matrix = [[0 for _ in range(n)] for _ in range(n)]
 
-    for (a, b) in edges:
-        matrix[a][b] = 1
+    for (src, dst, w) in edges:
+        matrix[src][dst] = w
         if not is_directed:
-            matrix[b][a] = 1
+            matrix[dst][src] = w
 
     return matrix
-
 
 """
 function used in eulerian path 
