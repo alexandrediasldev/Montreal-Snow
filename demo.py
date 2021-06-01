@@ -29,6 +29,7 @@ def parse_argument():
             country = args.country
     return args.city, args.country
 
+
 def stats(G, euler_circuit):
     # Computing some stats
 
@@ -39,12 +40,10 @@ def stats(G, euler_circuit):
     _vce = pd.value_counts(
         pd.value_counts([sorted(e)[0] + sorted(e)[1] for e in nx.MultiDiGraph(euler_circuit).edges()]))
     edge_visits = pd.DataFrame({'number of visits': _vce.index, 'number of edges': _vce.values})
-    edge_visits= edge_visits.sort_values(by='number of visits')
+    edge_visits = edge_visits.sort_values(by='number of visits')
 
     pl.plot_visiting_edges(edge_visits)
     pl.plot_visiting_nodes(node_visits)
-
-
 
     # Printing stats
     print("=========STATS=========")
@@ -63,11 +62,11 @@ def stats(G, euler_circuit):
 
     print('Number of edges traversed more than once: {}\n'.format(len(euler_circuit) - len(G.edges())))
 
-    #print('Number of times visiting each node:')
-    #print(node_visits.to_string(index=False))
+    # print('Number of times visiting each node:')
+    # print(node_visits.to_string(index=False))
 
-    #print('\nNumber of times visiting each edge:')
-    #print(edge_visits.to_string(index=False))
+    # print('\nNumber of times visiting each edge:')
+    # print(edge_visits.to_string(index=False))
 
 
 def main():
@@ -102,10 +101,8 @@ def main():
     # Note: max_weight_matching uses the 'weight' attribute by default as the attribute to maximize.
     odd_matching_dupes = nx.algorithms.max_weight_matching(g_odd_complete, True)
 
-
     # Convert matching to list of deduped tuples
     odd_matching = gu.remove_dupes_from_matching(odd_matching_dupes)
-
 
     g_odd_complete_min_edges = gu.get_nodes_odd_complete_min_edges(odd_matching)
 
@@ -116,21 +113,21 @@ def main():
     # Create augmented graph: add the min weight matching edges to g
     g_aug = ga.add_augmenting_path_to_graph(G, odd_matching)
 
-
     # 3.0: Compute Eulerian Circuit
     s = g_aug.edges()
     source_s = gu.get_first_element_from_multi_edge_graphe(s)
     # Create the Eulerian circuit
     naive_eulerian = False
-    if(naive_eulerian):
+    if naive_eulerian:
         naive_euler_circuit = list(nx.eulerian_circuit(g_aug, source=source_s))
         euler_circuit = naive_euler_circuit
     else:
         euler_circuit = ga.create_eulerian_circuit(g_aug, G, source_s)
 
-
-    stats(G,euler_circuit)
+    stats(G, euler_circuit)
     route = cu.euler_circuit_to_route(euler_circuit)
+
+    print(route)
 
     long, lat = cu.route_to_long_lat(G, route)
 
