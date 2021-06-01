@@ -9,8 +9,8 @@ import pandas as pd
 
 import plotly.graph_objects as go
 
-def parse_argument():
 
+def parse_argument():
     ps = argparse.ArgumentParser(description="Big demo.")
     ps.add_argument("--city",
                     type=str,
@@ -24,13 +24,17 @@ def parse_argument():
             country = "France"
         else:
             country = args.country
-    return args.city,args.country
+    return args.city, args.country
+
+
 def get_shortest_paths_distances(graph, pairs, edge_weight_name):
     """Compute shortest distance between each pair of nodes in a graph.  Return a dictionary keyed on node pairs (tuples)."""
     distances = {}
     for pair in pairs:
         distances[pair] = nx.dijkstra_path_length(graph, pair[0], pair[1], weight=edge_weight_name)
     return distances
+
+
 def create_complete_graph(pair_weights, flip_weights=True):
     """
     Create a completely connected graph using a list of vertex pairs and the shortest path distances between them
@@ -43,6 +47,8 @@ def create_complete_graph(pair_weights, flip_weights=True):
         wt_i = - v if flip_weights else v
         g.add_edge(k[0], k[1], attr_dict={'distance': v, 'weight': wt_i})
     return g
+
+
 def add_augmenting_path_to_graph(graph, min_weight_pairs):
     """
     Add the min weight matching edges to the original graph
@@ -60,8 +66,10 @@ def add_augmenting_path_to_graph(graph, min_weight_pairs):
                            pair[1],
                            attr_dict={'distance': nx.dijkstra_path_length(graph, pair[0], pair[1]),
                                       'trail': 'augmented'}
-                          )
+                           )
     return graph_aug
+
+
 def create_eulerian_circuit(graph_augmented, graph_original, starting_node=None):
     """Create the eulerian path using only edges from the original graph."""
     euler_circuit = []
@@ -70,7 +78,7 @@ def create_eulerian_circuit(graph_augmented, graph_original, starting_node=None)
     for edge in naive_circuit:
         edge_data = graph_augmented.get_edge_data(edge[0], edge[1])
         print(edge_data)
-        if "attr_dict" in edge_data[0] and  edge_data[0]['attr_dict']['trail'] != 'augmented':
+        if "attr_dict" in edge_data[0] and edge_data[0]['attr_dict']['trail'] != 'augmented':
             # If `edge` exists in original graph, grab the edge attributes and add to eulerian circuit.
             edge_att = graph_original[edge[0]][edge[1]]
             euler_circuit.append((edge[0], edge[1], edge_att))
@@ -91,84 +99,43 @@ def create_eulerian_circuit(graph_augmented, graph_original, starting_node=None)
     return euler_circuit
 
 
-def main():
-
-    city,country = parse_argument()
-    if(city is None or country is None):
-        print("City or country not found")
-        return 1
-
-    G = ox.graph_from_place(city + ', ' + country, network_type='drive')
-    G = ox.utils_graph.get_undirected(G)
-    #print(G.nodes(data=True))
-
-    #print(len(G.nodes))
-    #route = nx.shortest_path(G, list(G.nodes)[0], list(G.nodes)[-1])
-
-
-    #long = []
-    #lat = []
-    #for i in route:
-    #    point = G.nodes[i]
-    #    long.append(point['x'])
-    #    lat.append(point['y'])
-
-    # 1: Calculate list of nodes with odd degree
+def get_nodes_odd_degree(G):
     nodes_odd_degree = [v for v, d in G.degree if d % 2 == 1]
-    # 2.1: Compute all possible pairs of odd degree nodes.
-    odd_node_pairs = list(itertools.combinations(nodes_odd_degree, 2))
-    # 2.2: Compute the shortest path between each node pair calculated in 1.
-    # Compute shortest paths.  Return a dictionary with node pairs keys and a single value equal to shortest path distance.
-    odd_node_pairs_shortest_paths = get_shortest_paths_distances(G, odd_node_pairs, 'distance')
+    return nodes_odd_degree
 
-    # Preview with a bit of hack (there is no head/slice method for dictionaries).
-    print(dict(list(odd_node_pairs_shortest_paths.items())[0:10]))
 
-    # 2.3: Generate the complete graph
-    g_odd_complete = create_complete_graph(odd_node_pairs_shortest_paths, flip_weights=True)
+def compute_pairs_of_odd_degree_nodes(G):
+    odd_node_pairs = list(itertools.combinations(G, 2))
+    return odd_node_pairs
 
-    # Counts
-    print('Number of nodes: {}'.format(len(g_odd_complete.nodes())))
-    print('Number of edges: {}'.format(len(g_odd_complete.edges())))
-    # Plot the complete graph of odd-degree nodes
+
+def get_node_position(G):
+    return {node[0]: (node[1]['x'], -node[1]['y']) for node in G.nodes(data=True)}
+
+
+def plot_complete_graph_odd_degre(g_odd_complete, G, node_positions):
     plt.figure(figsize=(8, 6))
     pos_random = nx.random_layout(g_odd_complete)
-
-    node_positions = {node[0]: (node[1]['x'], -node[1]['y']) for node in G.nodes(data=True)}
-    print(node_positions)
 
     nx.draw_networkx_nodes(g_odd_complete, node_positions, node_size=20, node_color="red")
     nx.draw_networkx_edges(g_odd_complete, node_positions, alpha=0.1)
     plt.axis('off')
     plt.title('Complete Graph of Odd-degree Nodes')
     plt.show()
-    # Step 2.4: Compute Minimum Weight Matching
-    # Compute min weight matching.
-    # Note: max_weight_matching uses the 'weight' attribute by default as the attribute to maximize.
-    odd_matching_dupes = nx.algorithms.max_weight_matching(g_odd_complete, True)
-
-    print('Number of edges in matching: {}'.format(len(odd_matching_dupes)))
-    print(odd_matching_dupes)
-
-    # Convert matching to list of deduped tuples
-    odd_matching = list(pd.unique([tuple(sorted([k, v])) for k, v in odd_matching_dupes]))
-
-    # Counts
-    print('Number of edges in matching (deduped): {}'.format(len(odd_matching)))
-    print(odd_matching)
-
+def get_nodes_odd_complete_min_edges(odd_matching):
+    return nx.Graph(odd_matching)
+def plot_min_weight_matching_complete(g_odd_complete,g_odd_complete_min_edges,odd_matching, node_positions):
     plt.figure(figsize=(8, 6))
 
     # Plot the complete graph of odd-degree nodes
     nx.draw(g_odd_complete, pos=node_positions, node_size=20, alpha=0.05)
 
     # Create a new graph to overlay on g_odd_complete with just the edges from the min weight matching
-    g_odd_complete_min_edges = nx.Graph(odd_matching)
     nx.draw(g_odd_complete_min_edges, pos=node_positions, node_size=20, edge_color='blue', node_color='red')
 
     plt.title('Min Weight Matching on Complete Graph')
     plt.show()
-
+def plot_min_weight_matching_original(G,g_odd_complete_min_edges,node_positions):
     plt.figure(figsize=(8, 6))
 
     # Plot the original trail map graph
@@ -179,6 +146,91 @@ def main():
 
     plt.title('Min Weight Matching on Orginal Graph')
     plt.show()
+def remove_dupes_from_matching(odd_matching_dupes):
+    return list(pd.unique([tuple(sorted([k, v])) for k, v in odd_matching_dupes]))
+
+def get_first_element_from_multi_edge_graphe(multi_edge_graph):
+    for e in multi_edge_graph:
+        return e[0]
+
+def euler_circuit_to_route(euler_circuit):
+    route = []
+    for edge in euler_circuit:
+        route.append(edge[0])
+    return route
+def route_to_long_lat(G,route):
+    long = []
+    lat = []
+    for i in route:
+        point = G.nodes[i]
+        long.append(point['x'])
+        lat.append(point['y'])
+    return long,lat
+def long_lat_to_points(long,lat):
+
+    origin_point = long[0], lat[0]
+    dest_point = long[-1], lat[-1]
+    return origin_point,dest_point
+def main():
+    city, country = parse_argument()
+    if (city is None or country is None):
+        print("City or country not found")
+        return 1
+
+    G = ox.graph_from_place(city + ', ' + country, network_type='drive')
+    G = ox.utils_graph.get_undirected(G)
+    # print(G.nodes(data=True))
+
+    # print(len(G.nodes))
+    # route = nx.shortest_path(G, list(G.nodes)[0], list(G.nodes)[-1])
+
+    # long = []
+    # lat = []
+    # for i in route:
+    #    point = G.nodes[i]
+    #    long.append(point['x'])
+    #    lat.append(point['y'])
+
+    # 1: Calculate list of nodes with odd degree
+    nodes_odd_degree = get_nodes_odd_degree(G)
+    # 2.1: Compute all possible pairs of odd degree nodes.
+    odd_node_pairs = compute_pairs_of_odd_degree_nodes(nodes_odd_degree)
+    # 2.2: Compute the shortest path between each node pair calculated in 1.
+    # Compute shortest paths.  Return a dictionary with node pairs keys and a single value equal to shortest path distance.
+    odd_node_pairs_shortest_paths = get_shortest_paths_distances(G, odd_node_pairs, 'distance')
+
+    # Preview with a bit of hack (there is no head/slice method for dictionaries).
+    # print(dict(list(odd_node_pairs_shortest_paths.items())[0:10]))
+
+    # 2.3: Generate the complete graph
+    g_odd_complete = create_complete_graph(odd_node_pairs_shortest_paths, flip_weights=True)
+
+    # Counts
+    print('Number of nodes: {}'.format(len(g_odd_complete.nodes())))
+    print('Number of edges: {}'.format(len(g_odd_complete.edges())))
+    node_positions = get_node_position(G)
+
+    plot_complete_graph_odd_degre(g_odd_complete, G, node_positions)
+
+    # Step 2.4: Compute Minimum Weight Matching
+    # Compute min weight matching.
+    # Note: max_weight_matching uses the 'weight' attribute by default as the attribute to maximize.
+    odd_matching_dupes = nx.algorithms.max_weight_matching(g_odd_complete, True)
+
+    print('Number of edges in matching: {}'.format(len(odd_matching_dupes)))
+    print(odd_matching_dupes)
+
+    # Convert matching to list of deduped tuples
+    odd_matching = remove_dupes_from_matching(odd_matching_dupes)
+
+    # Counts
+    print('Number of edges in matching (deduped): {}'.format(len(odd_matching)))
+    print(odd_matching)
+    g_odd_complete_min_edges = get_nodes_odd_complete_min_edges(odd_matching)
+
+    plot_min_weight_matching_complete(g_odd_complete,g_odd_complete_min_edges,odd_matching,node_positions)
+
+    plot_min_weight_matching_original(G,g_odd_complete_min_edges,node_positions)
 
     # Create augmented graph: add the min weight matching edges to g
     g_aug = add_augmenting_path_to_graph(G, odd_matching)
@@ -188,13 +240,9 @@ def main():
     print('Number of edges in augmented graph: {}'.format(len(g_aug.edges())))
     print("Augmented")
     print(g_aug.edges())
-    #3.0: Compute Eulerian Circuit
+    # 3.0: Compute Eulerian Circuit
     s = g_aug.edges()
-    print(s)
-
-    for s1 in s:
-        source_s = s1[0]
-        break
+    source_s = get_first_element_from_multi_edge_graphe(s)
     naive_euler_circuit = list(nx.eulerian_circuit(g_aug, source=source_s))
     print('Length of eulerian circuit: {}'.format(len(naive_euler_circuit)))
 
@@ -220,7 +268,7 @@ def main():
     print('Mileage of circuit: {0:.2f}'.format(total_mileage_of_circuit))
     print('Mileage on original trail map: {0:.2f}'.format(total_mileage_on_orig_trail_map))
     print('Mileage retracing edges: {0:.2f}'.format(total_mileage_of_circuit - total_mileage_on_orig_trail_map))
-    if(total_mileage_on_orig_trail_map != 0):
+    if (total_mileage_on_orig_trail_map != 0):
         percent = ((1 - total_mileage_of_circuit / total_mileage_on_orig_trail_map) * - 100)
     else:
         percent = 0
@@ -237,24 +285,14 @@ def main():
 
     print('\nNumber of times visiting each edge:')
     print(edge_visits.to_string(index=False))
-    route = []
-    for edge in euler_circuit:
-        route.append(edge[0])
-    long = []
-    lat = []
-    for i in route:
-        point = G.nodes[i]
-        long.append(point['x'])
-        lat.append(point['y'])
+    route = euler_circuit_to_route(euler_circuit)
 
-    #print(odd_node_pairs)
-    #print('Number of pairs: {}'.format(len(odd_node_pairs)))
+    long, lat = route_to_long_lat(G,route)
 
-    origin_point = long[0], lat[0]
-    dest_point = long[-1], lat[-1]
+    # print(odd_node_pairs)
+    # print('Number of pairs: {}'.format(len(odd_node_pairs)))
 
-    print(origin_point)
-    print(dest_point)
+    origin_point ,dest_point = long_lat_to_points(long,lat)
 
     pl.plot_path(lat, long, origin_point, dest_point)
 
