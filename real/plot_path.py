@@ -4,6 +4,7 @@ import plotly.graph_objects as go
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def plot_path(lat, long, origin_point, destination_point):
     """
     Given a list of latitudes and longitudes, origin
@@ -56,6 +57,7 @@ def plot_path(lat, long, origin_point, destination_point):
                           'zoom': 13})
     fig.show()
 
+
 def plot_complete_graph_odd_degre(g_odd_complete, G, node_positions):
     plt.figure(figsize=(8, 6))
     pos_random = nx.random_layout(g_odd_complete)
@@ -66,7 +68,8 @@ def plot_complete_graph_odd_degre(g_odd_complete, G, node_positions):
     plt.title('Complete Graph of Odd-degree Nodes')
     plt.show()
 
-def plot_min_weight_matching_complete(g_odd_complete,g_odd_complete_min_edges,odd_matching, node_positions):
+
+def plot_min_weight_matching_complete(g_odd_complete, g_odd_complete_min_edges, odd_matching, node_positions):
     plt.figure(figsize=(8, 6))
 
     # Plot the complete graph of odd-degree nodes
@@ -77,7 +80,9 @@ def plot_min_weight_matching_complete(g_odd_complete,g_odd_complete_min_edges,od
 
     plt.title('Min Weight Matching on Complete Graph')
     plt.show()
-def plot_min_weight_matching_original(G,g_odd_complete_min_edges,node_positions):
+
+
+def plot_min_weight_matching_original(G, g_odd_complete_min_edges, node_positions):
     plt.figure(figsize=(8, 6))
 
     # Plot the original trail map graph
@@ -87,4 +92,14 @@ def plot_min_weight_matching_original(G,g_odd_complete_min_edges,node_positions)
     nx.draw(g_odd_complete_min_edges, pos=node_positions, node_size=20, alpha=1, node_color='red', edge_color='blue')
 
     plt.title('Min Weight Matching on Orginal Graph')
+    plt.show()
+
+
+def plot_visiting_edges(edge_visits):
+    edge_visits.plot.bar(x='n_visits', y='n_edges', rot=0)
+    plt.show()
+
+
+def plot_visiting_nodes(node_visits):
+    node_visits.plot.bar(x='n_visits', y='n_nodes', rot=0)
     plt.show()

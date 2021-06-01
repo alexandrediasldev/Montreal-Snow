@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import real.graph_utils as gu
 import real.graph_algo as ga
+import real.convert_utils as cu
 
 import plotly.graph_objects as go
 
@@ -28,28 +29,45 @@ def parse_argument():
             country = args.country
     return args.city, args.country
 
+def stats(G, euler_circuit):
+    # Computing some stats
 
-def euler_circuit_to_route(euler_circuit):
-    route = []
-    for edge in euler_circuit:
-        route.append(edge[0])
-    return route
+    total_length_of_circuit = sum([edge[2][0]['length'] for edge in euler_circuit])
+    total_length_on_orig_map = sum(nx.get_edge_attributes(G, 'length').values())
+    _vcn = pd.value_counts(pd.value_counts([(e[0]) for e in euler_circuit]), sort=False)
+    node_visits = pd.DataFrame({'n_visits': _vcn.index, 'n_nodes': _vcn.values})
+    _vce = pd.value_counts(
+        pd.value_counts([sorted(e)[0] + sorted(e)[1] for e in nx.MultiDiGraph(euler_circuit).edges()]))
+    edge_visits = pd.DataFrame({'n_visits': _vce.index, 'n_edges': _vce.values})
+    edge_visits=  edge_visits.sort_values(by='n_visits')
 
-
-def route_to_long_lat(G, route):
-    long = []
-    lat = []
-    for i in route:
-        point = G.nodes[i]
-        long.append(point['x'])
-        lat.append(point['y'])
-    return long, lat
+    pl.plot_visiting_edges(edge_visits)
+    pl.plot_visiting_nodes(node_visits)
 
 
-def long_lat_to_points(long, lat):
-    origin_point = long[0], lat[0]
-    dest_point = long[-1], lat[-1]
-    return origin_point, dest_point
+
+    # Printing stats
+    print("=========STATS=========")
+    print('Length of path: {0:.2f} m'.format(total_length_of_circuit))
+    print('Length of the original map: {0:.2f} m'.format(total_length_on_orig_map))
+    print('Length spent retracing edges: {0:.2f} m'.format(total_length_of_circuit - total_length_on_orig_map))
+    if (total_length_on_orig_map != 0):
+        percent = ((1 - total_length_of_circuit / total_length_on_orig_map) * - 100)
+    else:
+        percent = 0
+    print('Percent of mileage retraced: {0:.2f}% \n'.format(percent))
+
+    print('Number of edges in circuit: {}'.format(len(euler_circuit)))
+    print('Number of edges in original graph: {}'.format(len(G.edges())))
+    print('Number of nodes in original graph: {}\n'.format(len(G.nodes())))
+
+    print('Number of edges traversed more than once: {}\n'.format(len(euler_circuit) - len(G.edges())))
+
+    #print('Number of times visiting each node:')
+    #print(node_visits.to_string(index=False))
+
+    #print('\nNumber of times visiting each edge:')
+    #print(edge_visits.to_string(index=False))
 
 
 def main():
@@ -121,48 +139,18 @@ def main():
     print('Length of Eulerian circuit: {}'.format(len(euler_circuit)))
 
     # Preview first 20 directions of CPP solution
-    for i, edge in enumerate(euler_circuit[0:20]):
-        print(i, edge)
+    #for i, edge in enumerate(euler_circuit[0:20]):
+    #    print(i, edge)
 
-    # Computing some stats
+    stats(G,euler_circuit)
+    route = cu.euler_circuit_to_route(euler_circuit)
 
-    total_mileage_of_circuit = sum([edge[2][0]['length'] for edge in euler_circuit])
-    total_mileage_on_orig_trail_map = sum(nx.get_edge_attributes(G, 'distance').values())
-    _vcn = pd.value_counts(pd.value_counts([(e[0]) for e in euler_circuit]), sort=False)
-    node_visits = pd.DataFrame({'n_visits': _vcn.index, 'n_nodes': _vcn.values})
-    _vce = pd.value_counts(
-        pd.value_counts([sorted(e)[0] + sorted(e)[1] for e in nx.MultiDiGraph(euler_circuit).edges()]))
-    edge_visits = pd.DataFrame({'n_visits': _vce.index, 'n_edges': _vce.values})
-
-    # Printing stats
-    print('Mileage of circuit: {0:.2f}'.format(total_mileage_of_circuit))
-    print('Mileage on original trail map: {0:.2f}'.format(total_mileage_on_orig_trail_map))
-    print('Mileage retracing edges: {0:.2f}'.format(total_mileage_of_circuit - total_mileage_on_orig_trail_map))
-    if (total_mileage_on_orig_trail_map != 0):
-        percent = ((1 - total_mileage_of_circuit / total_mileage_on_orig_trail_map) * - 100)
-    else:
-        percent = 0
-    print('Percent of mileage retraced: {0:.2f}%\n'.format(percent))
-
-    print('Number of edges in circuit: {}'.format(len(euler_circuit)))
-    print('Number of edges in original graph: {}'.format(len(G.edges())))
-    print('Number of nodes in original graph: {}\n'.format(len(G.nodes())))
-
-    print('Number of edges traversed more than once: {}\n'.format(len(euler_circuit) - len(G.edges())))
-
-    print('Number of times visiting each node:')
-    print(node_visits.to_string(index=False))
-
-    print('\nNumber of times visiting each edge:')
-    print(edge_visits.to_string(index=False))
-    route = euler_circuit_to_route(euler_circuit)
-
-    long, lat = route_to_long_lat(G, route)
+    long, lat = cu.route_to_long_lat(G, route)
 
     # print(odd_node_pairs)
     # print('Number of pairs: {}'.format(len(odd_node_pairs)))
 
-    origin_point, dest_point = long_lat_to_points(long, lat)
+    origin_point, dest_point = cu.long_lat_to_points(long, lat)
 
     pl.plot_path(lat, long, origin_point, dest_point)
 
