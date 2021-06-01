@@ -50,7 +50,6 @@ def create_eulerian_circuit(graph_augmented, graph_original, starting_node=None)
 
     for edge in naive_circuit:
         edge_data = graph_augmented.get_edge_data(edge[0], edge[1])
-        print(edge_data)
         if "attr_dict" in edge_data[0] and edge_data[0]['attr_dict']['trail'] != 'augmented':
             # If `edge` exists in original graph, grab the edge attributes and add to eulerian circuit.
             edge_att = graph_original[edge[0]][edge[1]]
@@ -59,9 +58,9 @@ def create_eulerian_circuit(graph_augmented, graph_original, starting_node=None)
             aug_path = nx.shortest_path(graph_original, edge[0], edge[1], weight='distance')
             aug_path_pairs = list(zip(aug_path[:-1], aug_path[1:]))
 
-            print('Filling in edges for augmented edge: {}'.format(edge))
-            print('Augmenting path: {}'.format(' => '.join(str(aug_path))))
-            print('Augmenting path pairs: {}\n'.format(aug_path_pairs))
+            #print('Filling in edges for augmented edge: {}'.format(edge))
+            #print('Augmenting path: {}'.format(' => '.join(str(aug_path))))
+            #print('Augmenting path pairs: {}\n'.format(aug_path_pairs))
 
             # If `edge` does not exist in original graph, find the shortest path between its nodes and
             #  add the edge attributes for each link in the shortest path.

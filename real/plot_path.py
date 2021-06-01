@@ -96,10 +96,10 @@ def plot_min_weight_matching_original(G, g_odd_complete_min_edges, node_position
 
 
 def plot_visiting_edges(edge_visits):
-    edge_visits.plot.bar(x='n_visits', y='n_edges', rot=0)
+    edge_visits.plot.bar(x='number of visits', y='number of edges', rot=0)
     plt.show()
 
 
 def plot_visiting_nodes(node_visits):
-    node_visits.plot.bar(x='n_visits', y='n_nodes', rot=0)
+    node_visits.plot.bar(x='number of visits', y='number of nodes', rot=0)
     plt.show()
