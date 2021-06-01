@@ -35,11 +35,11 @@ def stats(G, euler_circuit):
     total_length_of_circuit = sum([edge[2][0]['length'] for edge in euler_circuit])
     total_length_on_orig_map = sum(nx.get_edge_attributes(G, 'length').values())
     _vcn = pd.value_counts(pd.value_counts([(e[0]) for e in euler_circuit]), sort=False)
-    node_visits = pd.DataFrame({'n_visits': _vcn.index, 'n_nodes': _vcn.values})
+    node_visits = pd.DataFrame({'number of visits': _vcn.index, 'number of nodes': _vcn.values})
     _vce = pd.value_counts(
         pd.value_counts([sorted(e)[0] + sorted(e)[1] for e in nx.MultiDiGraph(euler_circuit).edges()]))
-    edge_visits = pd.DataFrame({'n_visits': _vce.index, 'n_edges': _vce.values})
-    edge_visits=  edge_visits.sort_values(by='n_visits')
+    edge_visits = pd.DataFrame({'number of visits': _vce.index, 'number of edges': _vce.values})
+    edge_visits= edge_visits.sort_values(by='number of visits')
 
     pl.plot_visiting_edges(edge_visits)
     pl.plot_visiting_nodes(node_visits)
@@ -93,9 +93,6 @@ def main():
     # 2.3: Generate the complete graph
     g_odd_complete = ga.create_complete_graph(odd_node_pairs_shortest_paths, flip_weights=True)
 
-    # Counts
-    print('Number of nodes: {}'.format(len(g_odd_complete.nodes())))
-    print('Number of edges: {}'.format(len(g_odd_complete.edges())))
     node_positions = gu.get_node_position(G)
 
     pl.plot_complete_graph_odd_degre(g_odd_complete, G, node_positions)
@@ -105,15 +102,11 @@ def main():
     # Note: max_weight_matching uses the 'weight' attribute by default as the attribute to maximize.
     odd_matching_dupes = nx.algorithms.max_weight_matching(g_odd_complete, True)
 
-    print('Number of edges in matching: {}'.format(len(odd_matching_dupes)))
-    print(odd_matching_dupes)
 
     # Convert matching to list of deduped tuples
     odd_matching = gu.remove_dupes_from_matching(odd_matching_dupes)
 
-    # Counts
-    print('Number of edges in matching (deduped): {}'.format(len(odd_matching)))
-    print(odd_matching)
+
     g_odd_complete_min_edges = gu.get_nodes_odd_complete_min_edges(odd_matching)
 
     pl.plot_min_weight_matching_complete(g_odd_complete, g_odd_complete_min_edges, odd_matching, node_positions)
@@ -123,24 +116,18 @@ def main():
     # Create augmented graph: add the min weight matching edges to g
     g_aug = ga.add_augmenting_path_to_graph(G, odd_matching)
 
-    # Counts
-    print('Number of edges in original graph: {}'.format(len(G.edges())))
-    print('Number of edges in augmented graph: {}'.format(len(g_aug.edges())))
-    print("Augmented")
-    print(g_aug.edges())
+
     # 3.0: Compute Eulerian Circuit
     s = g_aug.edges()
     source_s = gu.get_first_element_from_multi_edge_graphe(s)
-    naive_euler_circuit = list(nx.eulerian_circuit(g_aug, source=source_s))
-    print('Length of eulerian circuit: {}'.format(len(naive_euler_circuit)))
-
     # Create the Eulerian circuit
-    euler_circuit = ga.create_eulerian_circuit(g_aug, G, source_s)
-    print('Length of Eulerian circuit: {}'.format(len(euler_circuit)))
+    naive_eulerian = False
+    if(naive_eulerian):
+        naive_euler_circuit = list(nx.eulerian_circuit(g_aug, source=source_s))
+        euler_circuit = naive_euler_circuit
+    else:
+        euler_circuit = ga.create_eulerian_circuit(g_aug, G, source_s)
 
-    # Preview first 20 directions of CPP solution
-    #for i, edge in enumerate(euler_circuit[0:20]):
-    #    print(i, edge)
 
     stats(G,euler_circuit)
     route = cu.euler_circuit_to_route(euler_circuit)
