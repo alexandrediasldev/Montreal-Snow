@@ -9,6 +9,9 @@ class MyTestCase(unittest.TestCase):
         n = 10
 
         self.assertEqual(Util.kosaraju(n, g1), [[9], [1, 4, 2, 5, 7], [6, 3], [0, 8]])
+        g2 = [(0, 1), (1, 2), (2, 3), (3, 0)]
+        n = 4
+        print(Util.kosaraju(n, g2))
 
 
 if __name__ == '__main__':
