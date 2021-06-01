@@ -2,7 +2,7 @@ import osmnx as ox
 import networkx as nx
 import plotly.graph_objects as go
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 def plot_path(lat, long, origin_point, destination_point):
     """
@@ -55,3 +55,36 @@ def plot_path(lat, long, origin_point, destination_point):
                                      'lon': long_center},
                           'zoom': 13})
     fig.show()
+
+def plot_complete_graph_odd_degre(g_odd_complete, G, node_positions):
+    plt.figure(figsize=(8, 6))
+    pos_random = nx.random_layout(g_odd_complete)
+
+    nx.draw_networkx_nodes(g_odd_complete, node_positions, node_size=20, node_color="red")
+    nx.draw_networkx_edges(g_odd_complete, node_positions, alpha=0.1)
+    plt.axis('off')
+    plt.title('Complete Graph of Odd-degree Nodes')
+    plt.show()
+
+def plot_min_weight_matching_complete(g_odd_complete,g_odd_complete_min_edges,odd_matching, node_positions):
+    plt.figure(figsize=(8, 6))
+
+    # Plot the complete graph of odd-degree nodes
+    nx.draw(g_odd_complete, pos=node_positions, node_size=20, alpha=0.05)
+
+    # Create a new graph to overlay on g_odd_complete with just the edges from the min weight matching
+    nx.draw(g_odd_complete_min_edges, pos=node_positions, node_size=20, edge_color='blue', node_color='red')
+
+    plt.title('Min Weight Matching on Complete Graph')
+    plt.show()
+def plot_min_weight_matching_original(G,g_odd_complete_min_edges,node_positions):
+    plt.figure(figsize=(8, 6))
+
+    # Plot the original trail map graph
+    nx.draw(G, pos=node_positions, node_size=20, alpha=0.1, node_color='black')
+
+    # Plot graph to overlay with just the edges from the min weight matching
+    nx.draw(g_odd_complete_min_edges, pos=node_positions, node_size=20, alpha=1, node_color='red', edge_color='blue')
+
+    plt.title('Min Weight Matching on Orginal Graph')
+    plt.show()
