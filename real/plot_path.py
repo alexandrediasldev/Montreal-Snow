@@ -22,22 +22,6 @@ def plot_path(lat, long, origin_point, destination_point):
         marker={'size': 10},
         line=dict(width=4.5, color='blue')))
 
-    # adding source marker
-    fig.add_trace(go.Scattermapbox(
-        name="Source",
-        mode="markers",
-        lon=[origin_point[1]],
-        lat=[origin_point[0]],
-        marker={'size': 12, 'color': "red"}))
-
-    # adding destination marker
-    fig.add_trace(go.Scattermapbox(
-        name="Destination",
-        mode="markers",
-        lon=[destination_point[1]],
-        lat=[destination_point[0]],
-        marker={'size': 12, 'color': 'green'}))
-
     # getting center for plots:
     lat_center = np.mean(lat)
     long_center = np.mean(long)

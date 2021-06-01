@@ -2,6 +2,7 @@ import itertools
 import pandas as pd
 import networkx as nx
 
+
 def get_nodes_odd_degree(G):
     """
     :param G: original graph
@@ -27,6 +28,7 @@ def compute_pairs_of_odd_degree_nodes(G):
     odd_node_pairs = list(itertools.combinations(G, 2))
     return odd_node_pairs
 
+
 def get_nodes_odd_complete_min_edges(odd_matching):
     """
     :param odd_matching: graph with odd matching nodes
@@ -34,12 +36,14 @@ def get_nodes_odd_complete_min_edges(odd_matching):
     """
     return nx.Graph(odd_matching)
 
+
 def remove_dupes_from_matching(odd_matching_dupes):
     """
     :param odd_matching_dupes: graph with odd matching and duplicates
     :return: graph with odd matching
     """
     return list(pd.unique([tuple(sorted([k, v])) for k, v in odd_matching_dupes]))
+
 
 def get_first_element_from_multi_edge_graphe(multi_edge_graph):
     """
