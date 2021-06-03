@@ -15,7 +15,7 @@ def adj_list(edges, n, is_directed):
     return successor
 
 
-def adj_matrix(edges, n, is_directed):
+def adj_matrix(edges, n, is_directed=False):
     """
     same as above bot returns adjacency matrix
     """
@@ -27,6 +27,7 @@ def adj_matrix(edges, n, is_directed):
             matrix[dst][src] = w
 
     return matrix
+
 
 """
 function used in eulerian path 
@@ -50,30 +51,32 @@ def remove_edge(adj, vertex, dest, is_directed=False):
         index = adj[dest].index(vertex)
         adj[dest].pop(index)
 
-def extract_odd_vertices(adj_mat):
-    n = len(adj_mat)
-    res = [0] * n
 
+def extract_odd_vertices(adj_mat):
+    """
+    :param adj_mat: the graph adj matrix
+    :return: a list of all the odd degree vertices
+    """
+
+    res = []
+    n = len(adj_mat)
     for i in range(n):
-        res[i] = len(adj_mat[i])
+        if (n - adj_mat[i].count(0)) % 2 == 1:
+            res.append(i)
 
     return res
 
 
-
 def odd_vertices(adj_list):
+    """
+    :param adj_list: the graph adj list
+    :return: a list of all the odd degree vertices
+    """
     res = []
     for i in range(len(adj_list)):
         if len(adj_list[i]) % 2 == 1:
             res.append(i)
     return res
-
-
-def pair_odd_vertices(odd_vertices, edges, n):
-    """
-        FIXME
-    """
-    return
 
 
 def reachable(adj, vertex, visited):
