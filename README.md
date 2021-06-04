@@ -2,7 +2,7 @@ The structure of this projet is separated in
 theory:
 Has the theoric part of the solution without any library
 real:
-Has the pratical part of the solution using osmnx, networkx, pandas and numpy
+Has the pratical part of the solution using osmnx, networkx, pandas and numpy, plotly
 
 To install do pip install -r requirements.txt
 
