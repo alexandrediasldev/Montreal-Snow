@@ -1,8 +1,7 @@
-import matplotlib.pyplot as plt
 import pandas as pd
 import real.plot_path as pl
 import networkx as nx
-import osmnx as ox
+
 
 
 def stats(G, euler_circuit):
