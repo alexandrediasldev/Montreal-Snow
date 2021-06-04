@@ -32,11 +32,11 @@ def parse_argument():
 
 
 def main():
-    city, country = parse_argument()
-    if (city is None or country is None):
-        print("Please specify --city and --country")
-        print("Example: --city Kremlin-Bicetre --country France")
-        return 1
+    city, country = "Hampstead", "Canada"
+    #if (city is None or country is None):
+    #    print("Please specify --city and --country")
+    #    print("Example: --city Kremlin-Bicetre --country France")
+    #    return 1
     print("Specified city: ",city)
     print("Specified country: ",country)
 
