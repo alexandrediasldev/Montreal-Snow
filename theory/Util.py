@@ -115,6 +115,13 @@ def reverse_graph(n, edges):
 
 
 def rec(s, succ, seen, stack):
+    """
+    Helper function for building the stack
+    :param s: the vertex
+    :param succ: successor list
+    :param seen: the visited list
+    :param stack: resulting stavk
+    """
     seen[s] = True
 
     for d in succ[s]:
@@ -125,6 +132,14 @@ def rec(s, succ, seen, stack):
 
 
 def build_res(s, succ, visited, res):
+    """
+    Auxiliary function for building the resulting list
+    :param s: the vertex
+    :param succ: the successor list
+    :param visited: the visited vector
+    :param res: the result list
+    :return: the result list
+    """
     visited[s] = True
     res.append(s)
 
