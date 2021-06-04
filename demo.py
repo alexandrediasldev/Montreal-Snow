@@ -18,21 +18,20 @@ def parse_argument():
                     type=str,
                     help="Specify country to search.")
     args = ps.parse_args()
-    if args.city is not None:
-        if args.country is None:
-            country = "France"
-        else:
-            country = args.country
+    if args.city is None:
+        city = "Hampstead"
+        country = "Canada"
+        return city, country
     return args.city, args.country
 
 
 
 def main():
-    city, country = "Hampstead", "Canada"
-    #if (city is None or country is None):
-    #    print("Please specify --city and --country")
-    #    print("Example: --city Kremlin-Bicetre --country France")
-    #    return 1
+    city, country = parse_argument()
+    if (city is None or country is None):
+        print("Please specify --city and --country")
+        print("Example: --city Kremlin-Bicetre --country France")
+
     print("Specified city: ",city)
     print("Specified country: ",country)
 
@@ -109,6 +108,13 @@ def main():
 
     # Convert the euleur circuit to a route
     route = cu.euler_circuit_to_route(euler_circuit)
+    f = open("output.txt", "w")
+    for e in euler_circuit:
+        if e[2][0].get('name') is None:
+            continue
+        for s in (e[2][0].get('name')):
+            f.write(s)
+        f.write('\n')
     long, lat = cu.route_to_long_lat(G, route)
     origin_point, dest_point = cu.long_lat_to_points(long, lat)
     print("Plotting the route")
