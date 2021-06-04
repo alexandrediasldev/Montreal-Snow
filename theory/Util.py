@@ -16,8 +16,11 @@ def adj_list(edges, n, is_directed=False):
 
 
 def adj_matrix(edges, n, is_directed=False):
-    """
-    same as above bot returns adjacency matrix
+    """"
+    edges = graph's edges
+    n = graph's number of vertices
+    is_directed = is the graph is directed
+    return : the adjacency matrix of the graph
     """
     matrix = [[0 for _ in range(n)] for _ in range(n)]
 
@@ -97,10 +100,6 @@ def reachable(adj, vertex, visited):
             res += reachable(adj, dst, visited)
     return res
 
-
-"""
-jkhrsj
-"""
 
 
 def reverse_graph(n, edges):
