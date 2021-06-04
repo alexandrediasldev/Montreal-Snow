@@ -1,16 +1,12 @@
 import argparse
 import real.plot_path as pl
-import itertools
-import copy
 import networkx as nx
 import osmnx as ox
-import matplotlib.pyplot as plt
-import pandas as pd
 import real.graph_utils as gu
 import real.graph_algo as ga
 import real.convert_utils as cu
 import real.stats as st
-import plotly.graph_objects as go
+
 
 
 def parse_argument():
