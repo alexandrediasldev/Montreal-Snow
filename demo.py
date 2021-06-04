@@ -18,21 +18,20 @@ def parse_argument():
                     type=str,
                     help="Specify country to search.")
     args = ps.parse_args()
-    if args.city is not None:
-        if args.country is None:
-            country = "France"
-        else:
-            country = args.country
+    if args.city is None:
+        city = "Hampstead"
+        country = "Canada"
+        return city, country
     return args.city, args.country
 
 
 
 def main():
-    city, country = "Hampstead", "Canada"
-    #if (city is None or country is None):
-    #    print("Please specify --city and --country")
-    #    print("Example: --city Kremlin-Bicetre --country France")
-    #    return 1
+    city, country = parse_argument()
+    if (city is None or country is None):
+        print("Please specify --city and --country")
+        print("Example: --city Kremlin-Bicetre --country France")
+
     print("Specified city: ",city)
     print("Specified country: ",country)
 
