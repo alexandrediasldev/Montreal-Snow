@@ -32,18 +32,16 @@ def adj_matrix(edges, n, is_directed=False):
     return matrix
 
 
-"""
-function used in eulerian path
-removes an edge from the list.
-Tries both permutations for undirected graph
-
-remaining_edges: list containing the remaining edges to operate on
-vertex: the first vertex of the edge
-dest: the last vertex of the edge
-"""
-
-
 def remove_edge(adj, vertex, dest, is_directed=False):
+    """
+    function used in eulerian path
+    removes an edge from the list.
+    Tries both permutations for undirected graph
+    :param adj:  the graph adjacency matrix from which we are removing edges
+    :param vertex:
+    :param dest: vertex <-> dest represents the edge to remove
+    :param is_directed:  whether the graph is directed or not
+    """
     try:
         index = adj[vertex].index(dest)
         adj[vertex].pop(index)
@@ -99,7 +97,6 @@ def reachable(adj, vertex, visited):
         if not visited[dst]:
             res += reachable(adj, dst, visited)
     return res
-
 
 
 def reverse_graph(n, edges):
