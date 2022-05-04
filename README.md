@@ -1,5 +1,5 @@
-# Clearing Montreal of snow
-The goal of this project solve a chinese postman problem and calculating a path 
+# Clearing Montréal of snow
+The goal of this project is to solve a chinese postman problem and to calculate a path 
 to clear the snow in Montréal.
 
 ## Theory:
