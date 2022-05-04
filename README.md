@@ -1,5 +1,6 @@
-# Chinese postman solver
-The goal of this project is to calculate a path to clear the snow in Montréal.
+# Clearing Montreal of snow
+The goal of this project solve a chinese postman problem and calculating a path 
+to clear the snow in Montréal.
 
 ## Theory:
 The theoric part of the solution without any library needed in requirement.txt
