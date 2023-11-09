@@ -27,7 +27,8 @@ To retrieve road maps, we used osmnx, based on the OpenStreetMap database. We be
 
 1. Get osmnx up and running and load a small town onto it.
 2. Learn about the osmnx framework by reading the documentation.
-3. Research the state of the art of the Chinese Postman. The GitHub repository https://github.com/matejker/everystreet seemed to meet our expectations. Unfortunately, after testing to try to run this GitHub, it turns out it uses another package that uses an old version of networkx.
+3. Research the state of the art of the Chinese Postman: The GitHub repository https://github.com/matejker/everystreet seemed to meet our expectations.  Unfortunately, after testing to try to run this GitHub, it turns out it uses another package that uses an old version of networkx.  
+
 After this unsuccessful attempt to use a pre-built program, we decided to look at a blog that explained the Chinese Postman in a real-world case with osmnx. It separated the Chinese Postman problem into four major steps:
 
 1. Find all nodes with odd degree.
@@ -58,22 +59,23 @@ To analyze these path length data, we researched the price of gasoline in Montre
 
 We can have a mathematical formula to determine the cost for snow removal:
 
-\[ P_e = \frac{(\text{Gasoline price in cents/Liter})}{L} \times C \]
+$$ P_e = \frac{(\text{Gasoline price in cents/Liter})}{L} \times C $$
 
 Where:
-- \( P_e \) is the cost of snow removal.
-- \( L \) is the length of the path to be covered in kilometers.
-- \( C \) is the consumption in Liters per kilometer (0.40).
+- *Pe* is the cost of snow removal.
+- *L* is the length of the path to be covered in kilometers.
+- *C* is the consumption in Liters per kilometer (0.40).
 
-The total cost for snow removal (\( P \)) can be calculated using the formula \( P = P_e \times L \times C \).
+The total cost for snow removal (*P*) can be calculated using the formula:
+$` P = P_e \times L \times C `$
 
-So, if we apply it to the Hampstead borough with \( L = 76 \) km:
+So, if we apply it to the Hampstead borough with *L = 76* km:
 
-\[ P = 130 \times 76 \times 0.40 = 3952 \text{ cents} = 39 \text{ CAD} \]
+$$ P = 130 \times 76 \times 0.40 = 3952 \text{ cents} = 39 \text{ CAD} $$
 
-to clear the snow in the Hampstead borough. We can even calculate the cost for revisiting roads, which does not contribute to snow removal (\( L = 50 \) km):
+to clear the snow in the Hampstead borough. We can even calculate the cost for revisiting roads, which does not contribute to snow removal (*L = 50* km):
 
-\[ P = 130 \times 50 \times 0.40 = 2600 \text{ cents} = 26 \text{ CAD} \]
+$$ P = 130 \times 50 \times 0.40 = 2600 \text{ cents} = 26 \text{ CAD} $$
 
 with, if necessary, a purchase of a snowplow costing approximately 44,000 Canadian dollars. The limitations of the solution are primarily due to attempting to achieve the optimal solution, resulting in multiple passes over the same path, and the algorithm being relatively slow.
 
