@@ -2,6 +2,8 @@
 The goal of this project is to solve a chinese postman problem and to calculate a path 
 to clear the snow in Montréal.
 
+Detailed explanation of how it's done :[HERE](./README_LOGIC.md)
+
 ## Theory:
 The theoric part of the solution without any library needed in requirement.txt
 ```
