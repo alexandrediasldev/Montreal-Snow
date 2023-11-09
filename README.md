@@ -7,7 +7,7 @@ Detailed explanation of how it's done :[HERE](./README_LOGIC.md)
 ## Theory:
 The theoric part of the solution without any library needed in requirement.txt
 ```
-python -m unittest theory/Test/*.py
+python -m unittest theory/Tests/*.py
 ```
 
 ## Real:

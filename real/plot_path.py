@@ -25,7 +25,7 @@ def plot_path(lat, long, origin_point, destination_point):
     lat_center = np.mean(lat)
     long_center = np.mean(long)
     # defining the layout using mapbox_style
-    fig.update_layout(mapbox_style="stamen-terrain",
+    fig.update_layout(mapbox_style="open-street-map",
                       mapbox_center_lat=30, mapbox_center_lon=-80)
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0},
                       mapbox={
